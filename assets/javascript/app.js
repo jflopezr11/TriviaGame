@@ -17,31 +17,26 @@ var trivia = {
     timerId: '',
     
     questions: {
-        q1:
-        q2:
-        q3:
-        q4:
-        q5:
-        q6:
-        q7:
+        q1: 'What is Batmans real name?',
+        q2: 'Who took the mantel of The Flash after Barry Allen?(pre-52)',
+        q3: 'Who was the second person to become Ronin?',
+        q4: 'Who was the leader of the Teen-Titans(Pre-52)?',
+        q5: 'Slade Wilson is known to be a anti-villain, what is his alter ego?',
     }, 
     options: {
-        q1:
-        q2:
-        q3:
-        q4:
-        q5:
-        q6:
-        q7:
+        q1:['Barbara Wayne','Thomas Wayne', 'Bruce Wayne'],
+        q2:['Wally West', 'Bart Allen', 'Don Allen'],
+        q3:['Maya Lopez', 'Clint Barton', 'Eric Brooks'],
+        q4:['Robin', 'Speedy', 'Guardian'],
+        q5:['Arsenal', 'Red Hood', 'Deathstroke'],
     },
     answers: {
-        q1:
-        q2:
-        q3:
-        q4:
-        q5:
-        q6:
-        q7:  
+        q1: 'Bruce Wayne',
+        q2: 'Wally West',
+        q3: 'Clint Barton',
+        q4: 'Robin',
+        q5: 'Deathstroke'
+        
     },
 
     startGame: function(){
@@ -89,24 +84,61 @@ var trivia = {
             if(trivia.timer === 4){
               $('#timer').addClass('last-seconds');
             }
-        
         }
+        else if (trivia.timer === -1){
+            trivia.unanswered ++;
+            trivia.result = false;
+            clearInterval(trivia.Id);
+            resultId = setTimeout(trivia.guessResult, 1000);
+            $('#results').html('<h3>Out of time! The answer was '+ Object.values(trivia.answers)[trivia.currentSet] + '</h3>'); 
+        }
+        else if (trivia.currentSet === Object.keys(trivia.questions).length){
+            $('#results')
+                .html('<h3> Thank you for playing!</h3>' +
+                '<p>Correct: '+ trivia.correct +'</p>'+
+                '<p>Incorrect: '+ trivia.incorrect +'</p>'+
+                '<p>Unanswered '+ trivia.unanswered + '</p>'+ 
+                '<p> Please play again! </p>');
+    
+            $('#game').hide();
+    
+            $('#start').show();
+        }
+    },
+    guessChecker : function() {
+        var resultId;
+
+        var currentAnswer =Object.values(trivia.answers)[trivia.currentSet];
+
+        if($(this).text() === currentAnswer){
+            $(this).addClass('btn-success').removeClass('btn-info');
+
+            trivia.correct++;
+            clearInterval(trivia.timerId);
+            resultId = setTimeout(trivia.guessResult, 1000);
+            $('#results').html('<h3>Correct Answer!</h3');
+
+        }
+        else{
+            $(this).addClass('btn-wrong').removeClass('btn-info');
+
+            trivia.incorrect++;
+            clearInterval(trivia.timerId);
+            resultId = setTimeout(trivia.guessResult, 1000);
+            $('#results').html('<h3> try again!' + currentAnswer + '</h3>');
+        }
+
+    },
+    guessResult : function(){
+        trivia.currentSet++;
+
+        $('option').remove();
+        $('#results h3').remove();
+
+        trivia.nextQuestion();
     }
 
-    else if (trivia.timer === -1){
-        trivia.unanswered ++;
-        trivia.result = false;
-        
-    }
+    
 
-
-
+    
 }
-
-//There will be a 20 second timer.
-
-//Each question should have one correct answer
-
-//Once a question is answered. It'll go to the next question. 
-
-//Once all questions are answered. It should track our score. 
