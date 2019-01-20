@@ -108,7 +108,7 @@ var trivia = {
     guessChecker : function() {
         var resultId;
 
-        var currentAnswer =Object.values(trivia.answers)[trivia.currentSet];
+        var currentAnswer = Object.values(trivia.answers)[trivia.currentSet];
 
         if($(this).text() === currentAnswer){
             $(this).addClass('btn-success').removeClass('btn-info');
@@ -122,7 +122,7 @@ var trivia = {
         else{
             $(this).addClass('btn-wrong').removeClass('btn-info');
 
-            trivia.incorrect++;
+            trivia.incorrect ++;
             clearInterval(trivia.timerId);
             resultId = setTimeout(trivia.guessResult, 1000);
             $('#results').html('<h3> try again!' + currentAnswer + '</h3>');
